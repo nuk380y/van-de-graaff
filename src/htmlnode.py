@@ -35,3 +35,26 @@ class LeafNode(HTMLNode):
         else:
             formatted = f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
             return formatted
+
+
+class ParentNode(HTMLNode):
+    def __init__(self, tag, children, props=None):
+        super().__init__(tag, None, children, props)
+
+    def to_html(self):
+        if self.tag == None:
+            raise ValueError
+        elif self.children == None:
+            raise ValueError("no children passed with parent")
+        else:
+            inner_tags = []
+            for child in self.children:
+                inner_tags.append(child.to_html())
+
+            # Not really required, but it keeps each line under 80 characters.
+            opener = f"<{self.tag}{self.props_to_html()}>"
+            contents = f"{''.join(inner_tags)}"
+            closer = f"</{self.tag}>"
+
+            formatted = f"{opener}{contents}{closer}"
+            return formatted
