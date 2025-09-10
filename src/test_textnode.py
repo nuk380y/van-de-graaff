@@ -11,7 +11,7 @@ class TestTextNode(unittest.TestCase):
 
     def test_repr(self):
         node = TextNode("Test text please ignore", TextType.PLAIN_TEXT)
-        exp_repr = "TextNode(Test text please ignore, , None)"
+        exp_repr = 'TextNode("Test text please ignore", , None)'
         self.assertEqual(repr(node), exp_repr)
 
 
