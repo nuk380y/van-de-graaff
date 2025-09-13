@@ -9,6 +9,9 @@ class HTMLNode:
         raise NotImplementedError("Overridden by child classes")
 
     def props_to_html(self):
+        if self.props == None:
+            return ""
+
         attribs = list()
 
         for key in self.props:
@@ -27,3 +30,17 @@ class HTMLNode:
             value_repr = f'"{self.value}"'
 
         return f"HTMLNode({tag_repr}, {value_repr}, {self.children}, {self.props})"
+
+
+class LeafNode(HTMLNode):
+    def __init__(self, tag, value=None, props=None):
+        super().__init__(tag, value, None, props)
+
+    def to_html(self):
+        if self.value == None:
+            raise ValueError
+        elif self.tag == None:
+            return self.value
+        else:
+            formatted = f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
+            return formatted
