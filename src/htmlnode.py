@@ -6,16 +6,16 @@ class HTMLNode:
         self.props = props
 
     def to_html(self):
-        raise NotImplementedError("Overridden by child classes")
+        raise NotImplementedError("to_html method not implemented")
 
     def props_to_html(self):
         if self.props == None:
             return ""
 
-        attribs = list()
+        attribs = ""
 
         for key in self.props:
-            attribs.append(f' {key}="{self.props[key]}"')
+            attribs += f' {key}="{self.props[key]}"'
 
         return "".join(attribs)
 
