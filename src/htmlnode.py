@@ -44,3 +44,24 @@ class LeafNode(HTMLNode):
         else:
             formatted = f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
             return formatted
+
+
+class ParentNode(HTMLNode):
+    def __init__(self, tag, children, props=None):
+        super().__init__(tag, None, children, props)
+
+    def to_html(self):
+        if self.tag == None:
+            raise ValueError("invalid HTML: tag required")
+        elif self.children == None:
+            raise ValueError("invalid HTML: child node required")
+        else:
+            inner_nodes = []
+            for child in self.children:
+                inner_nodes.append(child.to_html())
+
+            front_format = f"<{self.tag}{self.props_to_html()}>"
+            child_format = f"{''.join(inner_nodes)}"
+            close_format = f"</{self.tag}>"
+            format = f"{front_format}{child_format}{close_format}"
+            return format
