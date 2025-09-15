@@ -2,7 +2,23 @@ from textnode import TextNode, TextType
 
 
 def text_node_to_html_node(text_node):
-    pass
+    match text_node.text_type:
+        case TextType.PLAIN_TEXT:
+            convert = LeafNode(None, text_node.text)
+        case TextType.BOLD_TEXT:
+            convert = LeafNode("b", text_node.text)
+        case TextType.ITALIC_TEXT:
+            convert = LeafNode("i", text_node.text)
+        case TextType.CODE_TEXT:
+            convert = LeafNode("code", text_node.text)
+        case TextType.LINK_TEXT:
+            convert = LeafNode("a", text_node.text, {"href": text_node.url})
+        case TextType.IMAGE_TEXT:
+            convert = LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
+        case _:
+            raise ValueError("invalid text type")
+
+    return convert
 
 
 class HTMLNode:
