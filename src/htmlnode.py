@@ -1,3 +1,10 @@
+from textnode import TextNode, TextType
+
+
+def text_node_to_html_node(text_node):
+    pass
+
+
 class HTMLNode:
     def __init__(self, tag=None, value=None, children=None, props=None):
         self.tag = tag
