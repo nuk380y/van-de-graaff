@@ -38,7 +38,7 @@ class LeafNode(HTMLNode):
 
     def to_html(self):
         if self.value == None:
-            raise ValueError
+            raise ValueError("invalid HTML: value required")
         elif self.tag == None:
             return self.value
         else:
