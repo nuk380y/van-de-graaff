@@ -13,13 +13,10 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             if len(fragments) % 2 == 0:
                 raise SyntaxError("unmatched delimiter")
 
-            for frag in fragments:
-                if fragments.index(frag) % 2 != 0:
-                    frag = TextNode(frag, text_type)
+            for index, value in enumerate(fragments):
+                if index % 2 != 0:
+                    new_nodes.append(TextNode(value, text_type))
                 else:
-                    # elif fragments.index(frag) % 2 == 0:
-                    frag = TextNode(frag, node.text_type)
-
-            new_nodes.extend(fragments)
+                    new_nodes.append(TextNode(value, node.text_type))
 
     return new_nodes
