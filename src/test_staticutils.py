@@ -1,11 +1,16 @@
 import unittest
 
 # from htmlnode import HTMLNode, LeafNode, ParentNode, text_node_to_html_node
-from staticutils import split_nodes_delimiter
+from staticutils import (
+    extract_markdown_images,
+    extract_markdown_links,
+    split_nodes_delimiter,
+)
 from textnode import TextNode, TextType
 
 
 class TestUtils(unittest.TestCase):
+    # split_nodes_delimiter
     def test_split_nodes_delimiter_with_code(self):
         node = TextNode("This is text with a `code block` in it", TextType.PLAIN_TEXT)
         new_nodes = split_nodes_delimiter([node], "`", TextType.CODE_TEXT)
@@ -29,3 +34,17 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(new_nodes[0].text_type, TextType.PLAIN_TEXT)
 
     # Need to add more test that handle starting/ending with formatted sections.
+
+    # extract_markdown_images
+    def test_extract_markdown_images(self):
+        matches = extract_markdown_images(
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)"
+        )
+        self.assertListEqual([("image", "https://i.imgur.com/zjjcJKZ.png")], matches)
+
+    # extract_markdown_links
+    def test_extract_markdown_links(self):
+        matches = extract_markdown_links(
+            "Trying again with an [obvious link](https://www.google.com)"
+        )
+        self.assertListEqual([("obvious link", "https://www.google.com")], matches)
