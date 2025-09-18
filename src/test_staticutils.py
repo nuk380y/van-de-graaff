@@ -42,9 +42,21 @@ class TestUtils(unittest.TestCase):
         )
         self.assertListEqual([("image", "https://i.imgur.com/zjjcJKZ.png")], matches)
 
+    def test_extract_markdown_images_not_links(self):
+        matches = extract_markdown_images(
+            "A [link](https://start.duckduckgo.com) and an ![image](https://imgur.com/blah)"
+        )
+        self.assertListEqual([("image", "https://imgur.com/blah")], matches)
+
     # extract_markdown_links
     def test_extract_markdown_links(self):
         matches = extract_markdown_links(
             "Trying again with an [obvious link](https://www.google.com)"
         )
         self.assertListEqual([("obvious link", "https://www.google.com")], matches)
+
+    def test_extract_markdown_links_not_images(self):
+        matches = extract_markdown_links(
+            "A [link](https://start.duckduckgo.com) and an ![image](https://imgur.com/blah)"
+        )
+        self.assertListEqual([("link", "https://start.duckduckgo.com")], matches)
