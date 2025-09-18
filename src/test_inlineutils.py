@@ -1,7 +1,7 @@
 import unittest
 
 # from htmlnode import HTMLNode, LeafNode, ParentNode, text_node_to_html_node
-from staticutils import (
+from inlineutils import (
     extract_markdown_images,
     extract_markdown_links,
     split_nodes_delimiter,
