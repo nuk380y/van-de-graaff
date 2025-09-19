@@ -1,6 +1,6 @@
 import unittest
 
-from splitutils import split_nodes_delimiter
+from splitutils import split_nodes_delimiter, split_nodes_image, split_nodes_link
 from textnode import TextNode, TextType
 
 
@@ -29,6 +29,8 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(new_nodes[0].text_type, TextType.PLAIN_TEXT)
 
     # Need to add more test that handle starting/ending with formatted sections.
+    # Might need to add these tests and subsequent changes sooner rather than
+    # later...
 
     # split_nodes_image
     def test_split_nodes_images(self):
@@ -54,3 +56,22 @@ class TestUtils(unittest.TestCase):
         )
 
     # split_nodes_link
+    def test_split_nodes_links(self):
+        node = TextNode(
+            "This is text with a [link](https://www.google.com) and another [second link](https://start.duckduckgo.com)",
+            TextType.PLAIN_TEXT,
+        )
+        new_nodes = split_nodes_link([node])
+        self.assertListEqual(
+            [
+                TextNode("This is text with a ", TextType.PLAIN_TEXT),
+                TextNode("link", TextType.LINK_TEXT, "https://www.google.com"),
+                TextNode(" and another ", TextType.PLAIN_TEXT),
+                TextNode(
+                    "second link",
+                    TextType.LINK_TEXT,
+                    "https://start.duckduckgo.com",
+                ),
+            ],
+            new_nodes,
+        )
