@@ -30,14 +30,17 @@ def split_nodes_image(old_nodes):
         if node.text_type != TextType.PLAIN_TEXT:
             new_nodes.append(node)
         else:
-            fragments = extract_markdown_images(node)
+            text = node.text
+            images = extract_markdown_images(text)
 
-            if len(fragments) % 2 == 0:
-                raise SyntaxError("unmatched delimiter")
+            for alt, url in images:
+                pre, post = text.split(f"![{alt}]({url})", 1)
 
-            print(f"{fragments}")
-            # if fragments[0] == "":
-            #     continue
+                if pre:
+                    new_nodes.append(TextNode(pre, TextType.PLAIN_TEXT))
+                new_nodes.append(TextNode(alt, TextType.IMAGE_TEXT, url))
+
+                text = post
 
     return new_nodes
 
