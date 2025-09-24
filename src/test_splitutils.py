@@ -55,6 +55,22 @@ class TestUtils(unittest.TestCase):
             new_nodes,
         )
 
+    def test_split_nodes_images_with_no_target(self):
+        node = TextNode(
+            "There is no image formatted text in this string.",
+            TextType.PLAIN_TEXT,
+        )
+        new_nodes = split_nodes_image([node])
+        self.assertListEqual(
+            [
+                TextNode(
+                    "There is no image formatted text in this string.",
+                    TextType.PLAIN_TEXT,
+                )
+            ],
+            new_nodes,
+        )
+
     # split_nodes_link
     def test_split_nodes_links(self):
         node = TextNode(
@@ -72,6 +88,22 @@ class TestUtils(unittest.TestCase):
                     TextType.LINK_TEXT,
                     "https://start.duckduckgo.com",
                 ),
+            ],
+            new_nodes,
+        )
+
+    def test_split_nodes_links_with_no_target(self):
+        node = TextNode(
+            "There is no link formatted text in this string.",
+            TextType.PLAIN_TEXT,
+        )
+        new_nodes = split_nodes_link([node])
+        self.assertListEqual(
+            [
+                TextNode(
+                    "There is no link formatted text in this string.",
+                    TextType.PLAIN_TEXT,
+                )
             ],
             new_nodes,
         )
