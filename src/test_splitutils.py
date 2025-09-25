@@ -28,9 +28,39 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(new_nodes[0].text, "This text has **bold** and ")
         self.assertEqual(new_nodes[0].text_type, TextType.PLAIN_TEXT)
 
-    # Need to add more test that handle starting/ending with formatted sections.
-    # Might need to add these tests and subsequent changes sooner rather than
-    # later...
+    def test_split_nodes_delimiter_leading_blank(self):
+        node = TextNode(
+            "**MarkDown** formatting at the front should be the first new node.",
+            TextType.PLAIN_TEXT,
+        )
+        new_nodes = split_nodes_delimiter([node], "**", TextType.BOLD_TEXT)
+        self.assertListEqual(
+            [
+                TextNode("MarkDown", TextType.BOLD_TEXT),
+                TextNode(
+                    " formatting at the front should be the first new node.",
+                    TextType.PLAIN_TEXT,
+                ),
+            ],
+            new_nodes,
+        )
+
+    def test_split_nodes_delimiter_trailing_blank(self):
+        node = TextNode(
+            "MarkDown formatting at the front should be the first new _node._",
+            TextType.PLAIN_TEXT,
+        )
+        new_nodes = split_nodes_delimiter([node], "_", TextType.ITALIC_TEXT)
+        self.assertListEqual(
+            [
+                TextNode(
+                    "MarkDown formatting at the front should be the first new ",
+                    TextType.PLAIN_TEXT,
+                ),
+                TextNode("node.", TextType.ITALIC_TEXT),
+            ],
+            new_nodes,
+        )
 
     # split_nodes_image
     def test_split_nodes_images(self):
