@@ -1,4 +1,4 @@
-from extractutils import extract_markdown_images
+from extractutils import extract_markdown_images, extract_markdown_links
 from textnode import TextNode, TextType
 
 
@@ -27,23 +27,41 @@ def split_nodes_image(old_nodes):
     new_nodes = []
 
     for node in old_nodes:
-        if node.text_type != TextType.PLAIN_TEXT:
-            new_nodes.append(node)
-        else:
-            text = node.text
-            images = extract_markdown_images(text)
+        text = node.text
+        images = extract_markdown_images(text)
 
-            for alt, url in images:
-                pre, post = text.split(f"![{alt}]({url})", 1)
+        for alt, url in images:
+            pre, post = text.split(f"![{alt}]({url})", 1)
 
-                if pre:
-                    new_nodes.append(TextNode(pre, TextType.PLAIN_TEXT))
-                new_nodes.append(TextNode(alt, TextType.IMAGE_TEXT, url))
+            if pre:
+                new_nodes.append(TextNode(pre, TextType.PLAIN_TEXT))
+            new_nodes.append(TextNode(alt, TextType.IMAGE_TEXT, url))
 
-                text = post
+            text = post
+
+        if text != "":
+            new_nodes.append(TextNode(text, TextType.PLAIN_TEXT))
 
     return new_nodes
 
 
 def split_nodes_link(old_nodes):
-    pass
+    new_nodes = []
+
+    for node in old_nodes:
+        text = node.text
+        links = extract_markdown_links(text)
+
+        for alt, url in links:
+            pre, post = text.split(f"[{alt}]({url})", 1)
+
+            if pre:
+                new_nodes.append(TextNode(pre, TextType.PLAIN_TEXT))
+            new_nodes.append(TextNode(alt, TextType.LINK_TEXT, url))
+
+            text = post
+
+        if text != "":
+            new_nodes.append(TextNode(text, TextType.PLAIN_TEXT))
+
+    return new_nodes
