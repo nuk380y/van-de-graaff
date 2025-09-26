@@ -1,6 +1,11 @@
 import unittest
 
-from splitutils import split_nodes_delimiter, split_nodes_image, split_nodes_link
+from splitutils import (
+    split_nodes_delimiter,
+    split_nodes_image,
+    split_nodes_link,
+    text_to_textnodes,
+)
 from textnode import TextNode, TextType
 
 
@@ -134,6 +139,33 @@ class TestUtils(unittest.TestCase):
                     "There is no link formatted text in this string.",
                     TextType.PLAIN_TEXT,
                 )
+            ],
+            new_nodes,
+        )
+
+    # text_to_textnodes
+    def test_text_to_textnodes(self):
+        node = TextNode(
+            "This is **text** with an _italic_ word, a `code block`, an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg), and a [link](https://boot.dev)",
+            TextType.PLAIN_TEXT,
+        )
+        new_nodes = text_to_textnodes(node)
+        self.assertListEqual(
+            [
+                TextNode("This is ", TextType.PLAIN_TEXT),
+                TextNode("text", TextType.BOLD_TEXT),
+                TextNode(" with an ", TextType.PLAIN_TEXT),
+                TextNode("italic", TextType.ITALIC_TEXT),
+                TextNode(" word, a ", TextType.PLAIN_TEXT),
+                TextNode("code block", TextType.CODE_TEXT),
+                TextNode(", an ", TextType.PLAIN_TEXT),
+                TextNode(
+                    "obi wan image",
+                    TextType.IMAGE_TEXT,
+                    "https://i.imgur.com/fJRm4Vk.jpeg",
+                ),
+                TextNode(", and a ", TextType.PLAIN_TEXT),
+                TextNode("link", TextType.LINK_TEXT, "https://boot.dev"),
             ],
             new_nodes,
         )
