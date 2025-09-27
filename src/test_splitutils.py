@@ -106,6 +106,42 @@ class TestUtils(unittest.TestCase):
             new_nodes,
         )
 
+    def test_split_nodes_images_at_start(self):
+        node = TextNode(
+            "![fancy bullet](https://i.imgur.com/not_real.png) bullet point",
+            TextType.PLAIN_TEXT,
+        )
+        new_nodes = split_nodes_image([node])
+        self.assertListEqual(
+            [
+                TextNode(
+                    "fancy bullet",
+                    TextType.IMAGE_TEXT,
+                    "https://i.imgur.com/not_real.png",
+                ),
+                TextNode(" bullet point", TextType.PLAIN_TEXT),
+            ],
+            new_nodes,
+        )
+
+    def test_split_nodes_images_at_end(self):
+        node = TextNode(
+            "Ending ![image](https://i.imgur.com/not_real.png)",
+            TextType.PLAIN_TEXT,
+        )
+        new_nodes = split_nodes_image([node])
+        self.assertListEqual(
+            [
+                TextNode("Ending ", TextType.PLAIN_TEXT),
+                TextNode(
+                    "image",
+                    TextType.IMAGE_TEXT,
+                    "https://i.imgur.com/not_real.png",
+                ),
+            ],
+            new_nodes,
+        )
+
     # split_nodes_link
     def test_split_nodes_links(self):
         node = TextNode(
