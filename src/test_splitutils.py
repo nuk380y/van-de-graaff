@@ -229,7 +229,7 @@ This is the same paragraph on a new line.
             ],
         )
 
-    def test_markdown_to_blocks_with_empty_strings(self):
+    def test_markdown_to_blocks_with_even_newlines(self):
         md = """
 This is a paragraph.
 
@@ -242,7 +242,27 @@ This is another paragraph after three new lines.
             blocks,
             [
                 "This is a paragraph.",
-                "This is another paragraph after three new lines.",
+                "This is another paragraph after two blank lines.",
+            ],
+        )
+
+    def test_markdown_to_blocks_with_odd_newlines(self):
+        md = """
+This is a paragraph.
+
+
+
+
+
+This is another paragraph after five blank lines.
+        """
+
+        blocks = markdown_to_blocks(md)
+        self.assertEqual(
+            blocks,
+            [
+                "This is a paragraph.",
+                "This is another paragraph after five blank lines.",
             ],
         )
 
