@@ -234,7 +234,7 @@ This is the same paragraph on a new line.
 This is a paragraph.
 
 
-This is another paragraph after three new lines.
+This is another paragraph after two blank lines.
         """
 
         blocks = markdown_to_blocks(md)
