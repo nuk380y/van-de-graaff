@@ -105,9 +105,10 @@ def markdown_to_blocks(markdown):
 
     for block in blocks:
         block = block.strip()
-        print(f"BLOCK:   {block}")
 
-        if block != "":
+        if block == "\n":
+            continue
+        elif block != "":
             text_blocks.append(block)
 
     return text_blocks
