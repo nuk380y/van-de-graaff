@@ -1,6 +1,7 @@
 import unittest
 
 from splitutils import (
+    markdown_to_blocks,
     split_nodes_delimiter,
     split_nodes_image,
     split_nodes_link,
