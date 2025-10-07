@@ -229,6 +229,23 @@ This is the same paragraph on a new line.
             ],
         )
 
+    def test_markdown_to_blocks_with_empty_strings(self):
+        md = """
+This is a paragraph.
+
+
+This is another paragraph after three new lines.
+        """
+
+        blocks = markdown_to_blocks(md)
+        self.assertEqual(
+            blocks,
+            [
+                "This is a paragraph.",
+                "This is another paragraph after three new lines.",
+            ],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
