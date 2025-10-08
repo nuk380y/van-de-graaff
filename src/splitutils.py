@@ -1,5 +1,17 @@
+import re
+from enum import Enum
+
 from extractutils import extract_markdown_images, extract_markdown_links
 from textnode import TextNode, TextType
+
+
+class BlockType(Enum):
+    PARAGRAPH = "paragraph"
+    HEADING = "heading"
+    CODE = "code"
+    QUOTE = "quote"
+    UNORDERED_LIST = "unordered_list"
+    ORDERED_LIST = "ordered_list"
 
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
@@ -112,3 +124,30 @@ def markdown_to_blocks(markdown):
             text_blocks.append(block)
 
     return text_blocks
+
+
+def block_to_block_type(md):
+    identified_blocks = []
+
+    # Double-check how to define RegEx
+    # matches = re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+    for string in md:
+        # Match for headings
+        if re.match(r"^#{1,6}\s\w+", string):
+            TextNode(string, BlockType.HEADING)
+        # Match for code blocks
+        elif re.match(r"", string):
+            TextNode(string, BlockType.CODE)
+        # Match for quotes
+        elif re.match(r"^>{1}\s\w*", string):
+            TextNode(string, BlockType.QUOTE)
+        # Match for unordered
+        elif re.match(r"", string):
+            TextNode(string, BlockType.UNORDERED_LIST)
+        # Match for ordered
+        elif re.match(r"", string):
+            TextNode(string, BlockType.ORDERED_LIST)
+        else:
+            TextNode(string, BlockType.PARAGRAPH)
+
+    return identified_blocks
