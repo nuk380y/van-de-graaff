@@ -129,25 +129,33 @@ def markdown_to_blocks(markdown):
 def block_to_block_type(md):
     identified_blocks = []
 
-    # Double-check how to define RegEx
-    # matches = re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+    # Define multiline patterns
+    patt_code = re.compile(r"`{3}[a-z]*\n[\s\S]*?\n`{3}", re.MULTILINE)
+    patt_quote = re.compile(r">{1}\s\w*", re.MULTILINE)
+    patt_unordered = re.compile(r"^[\-\*]\s.+\n", re.MULTILINE)
+    patt_ordered = re.compile(r"^[0-9]{1,3}\.\s.+\n", re.MULTILINE)
+
     for string in md:
+        new_node = TextNode("", None)
+
         # Match for headings
         if re.match(r"^#{1,6}\s\w+", string):
-            TextNode(string, BlockType.HEADING)
+            new_node = TextNode(string, BlockType.HEADING)
         # Match for code blocks
-        elif re.match(r"", string):
-            TextNode(string, BlockType.CODE)
+        elif patt_code.match(string):
+            new_node = TextNode(string, BlockType.CODE)
         # Match for quotes
-        elif re.match(r"^>{1}\s\w*", string):
-            TextNode(string, BlockType.QUOTE)
+        elif patt_quote.match(string):
+            new_node = TextNode(string, BlockType.QUOTE)
         # Match for unordered
-        elif re.match(r"", string):
-            TextNode(string, BlockType.UNORDERED_LIST)
+        elif patt_unordered.match(string):
+            new_node = TextNode(string, BlockType.UNORDERED_LIST)
         # Match for ordered
-        elif re.match(r"", string):
-            TextNode(string, BlockType.ORDERED_LIST)
+        elif patt_ordered.match(string):
+            new_node = TextNode(string, BlockType.ORDERED_LIST)
         else:
-            TextNode(string, BlockType.PARAGRAPH)
+            new_node = TextNode(string, BlockType.PARAGRAPH)
+
+        identified_blocks.append(new_node)
 
     return identified_blocks
