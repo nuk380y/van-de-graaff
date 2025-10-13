@@ -1,6 +1,8 @@
 import unittest
 
 from splitutils import (
+    BlockType,
+    block_to_block_type,
     markdown_to_blocks,
     split_nodes_delimiter,
     split_nodes_image,
@@ -263,6 +265,34 @@ This is another paragraph after five blank lines.
             [
                 "This is a paragraph.",
                 "This is another paragraph after five blank lines.",
+            ],
+        )
+
+    # block_to_block_type
+    def test_block_to_block_type(self):
+        md = """
+# First heading
+
+Paragraph leading to code:
+
+```py
+def code_block():
+    pass
+```
+
+> Robert Morris had a cool quote about something.
+        """
+
+        id_blocks = block_to_block_type(md)
+        self.assertEqual(
+            id_blocks,
+            [
+                TextNode("# First heading", BlockType.HEADING),
+                TextNode("Paragraph leading to code:", BlockType.PARAGRAPH),
+                TextNode("```py\ndef code_block():\n    pass\n```", BlockType.CODE),
+                TextNode(
+                    "> Robert Morris had a cool quote about something.", BlockType.QUOTE
+                ),
             ],
         )
 
