@@ -135,7 +135,7 @@ def block_to_block_type(md):
     patt_unordered = re.compile(r"^[\-\*]\s.+\n", re.MULTILINE)
     patt_ordered = re.compile(r"^[0-9]{1,3}\.\s.+\n", re.MULTILINE)
 
-    for string in md:
+    for string in markdown_to_blocks(md):
         new_node = TextNode("", None)
 
         # Match for headings
