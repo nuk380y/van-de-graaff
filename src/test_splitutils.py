@@ -296,6 +296,35 @@ def code_block():
             ],
         )
 
+    def test_block_to_block_type_lists(self):
+        md = """
+# First heading
+
+1. First bullet
+2. Second bullet
+3. Third...
+
+- bullet point
+- bullet point
+
+* bullet point
+* bullet point
+        """
+
+        id_blocks = block_to_block_type(md)
+        self.assertEqual(
+            id_blocks,
+            [
+                TextNode("# First heading", BlockType.HEADING),
+                TextNode(
+                    "1. First bullet\n2. Second bullet\n3. Third...",
+                    BlockType.ORDERED_LIST,
+                ),
+                TextNode("- bullet point\n- bullet point", BlockType.UNORDERED_LIST),
+                TextNode("* bullet point\n* bullet point", BlockType.UNORDERED_LIST),
+            ],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
