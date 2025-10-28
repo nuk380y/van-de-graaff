@@ -82,3 +82,21 @@ def block_to_block_type(md):
         identified_blocks.append(new_node)
 
     return identified_blocks
+
+
+def markdown_to_html_node(md):
+    md_blocks = markdown_to_blocks(md)
+
+    for block in md_blocks:
+        md_type = block_to_block_type(block)
+
+        # Based on the type of block, create new HTMLNode
+
+        # Assign correct child nodes objects to the block.
+        # HERE THERE BE MONSTERS!
+
+        # Ensure that `BlockType.CODE` blocks are not parsed internally.
+
+    # Incorporate all nodes into a single HTMLNode (`<div></div>`)
+    # return div_node
+    pass
