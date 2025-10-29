@@ -1,6 +1,7 @@
 import re
 from enum import Enum
 
+from htmlnode import HTMLNode, LeafNode, ParentNode
 from splitutils import split_nodes_delimiter, split_nodes_image, split_nodes_link
 from textnode import TextNode, TextType
 
@@ -86,11 +87,32 @@ def block_to_block_type(md):
 
 def markdown_to_html_node(md):
     md_blocks = markdown_to_blocks(md)
+    html_blocks = []
+
+    # REF: HTMLNode(tag=None, value=None, children=None, props=None)
+    # REF: ParentNode(tag, children, props=None)
+    # REF: LeafNode(tag, value=None, props=None)
 
     for block in md_blocks:
         md_type = block_to_block_type(block)
 
-        # Based on the type of block, create new HTMLNode
+        # This _likely_ needs to be in another loop to account for each of the
+        # items in `md_type`
+        if md_type.text_type is BlockType.HEADING:
+            html_blocks.append(HTMLNode("h", md_type.text))
+        elif md_type.text_type is BlockType.QUOTE:
+            html_blocks.append(HTMLNode("blockquote", md_type.text))
+        elif md_type.text_type is BlockType.CODE:
+            inner_block = LeafNode("code", md_type.text)
+            html_blocks.append(ParentNode("pre", inner_block))
+        elif md_type.text_type is BlockType.UNORDERED_LIST:
+            inner_block = LeafNode("li", md_type.text)
+            html_blocks.append(ParentNode("ul", inner_block))
+        elif md_type.text_type is BlockType.ORDERED_LIST:
+            inner_block = LeafNode("li", md_type.text)
+            html_blocks.append(ParentNode("ol", inner_block))
+        else:
+            html_blocks.append(HTMLNode("p", md_type.text))
 
         # Assign correct child nodes objects to the block.
         # HERE THERE BE MONSTERS!
